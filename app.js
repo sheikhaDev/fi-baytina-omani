@@ -106,7 +106,7 @@ async function panel(tab='img'){
   document.getElementById('s_sv').onclick=()=>{ss.push({t:new Date().toISOString(),child:S.child,type:s_t.value,item:s_i.value,indep:s_a.checked,hint:s_h.checked,expr:s_e.checked,home:s_m.checked,note:s_n.value});save('sessions',ss);refresh()};
   pb.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{ss.splice(+b.dataset.d,1);save('sessions',ss);refresh()})}
  if(tab==='exp'){
-  pb.innerHTML=`<div class="note">الصور والأصوات المرفوعة تبقى في هذا المتصفح. لإدراجها في GitHub نزّلها هنا، ثم ضعها في مجلدي images/ و sounds/ وارفع التغييرات.</div>
+  pb.innerHTML=`<div class="note">الصور والأصوات المرفوعة تبقى في هذا المتصفح. لإدراجها في GitHub نزّلها هنا، ثم ضع الصور بجانب index.html والتسجيلات داخل مجلد sounds/ وارفع التغييرات.</div>
   <p><button class="p-btn main" id="e1">نتائج التدريب (CSV – يفتح في Excel)</button> <button class="p-btn main" id="e2">الجلسات (CSV)</button> <button class="p-btn" id="e3">نسخة احتياطية (JSON)</button></p>
   <p><button class="p-btn main" id="e4">تنزيل الصور والأصوات المضافة</button></p>`;
   document.getElementById('e1').onclick=()=>dl('trials.csv',csv([['time','child','activity','item','errors','hint','correct'],...load('trials',[]).map(t=>[t.t,t.child,t.act,t.item,t.tries,t.hint?1:0,t.ok?1:0])]));
