@@ -1,3 +1,26 @@
-const C='bayt-v1';
-self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./','index.html','css/style.css','js/data.js','js/store.js','js/engine3d.js','js/app.js'])));self.skipWaiting()});
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(async c=>{const m=await c.match(e.request);const f=fetch(e.request).then(r=>{if(r.ok)c.put(e.request,r.clone());return r});return m||f}))});
+const cacheName = 'fi-baytina-omani-v2';
+const files = [
+  './', 'index.html', 'style.css', 'data.js', 'store.js', 'engine3d.js', 'app.js',
+  'house.png', 'kitchen.png', 'majlis.png', 'bedroom.png', 'water.png',
+  'apple.png', 'book.png', 'ball.png', 'blanket.png', 'help.png'
+];
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(cacheName).then(cache => cache.addAll(files)).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', event => event.waitUntil(self.clients.claim()));
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  if (request.method !== 'GET' || !request.url.startsWith(self.registration.scope)) return;
+  event.respondWith((async () => {
+    const cache = await caches.open(cacheName);
+    try {
+      const response = await fetch(request);
+      if (response.ok && response.status === 200) await cache.put(request, response.clone());
+      return response;
+    } catch (error) {
+      const saved = await cache.match(request) || (request.mode === 'navigate' && await cache.match('index.html'));
+      if (saved) return saved;
+      throw error;
+    }
+  })());
+});
