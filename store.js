@@ -11,7 +11,7 @@ const log=r=>{const a=load('trials',[]);a.push({t:new Date().toISOString(),child
 const urls=new Map();
 async function mUrl(key){if(urls.has(key))return urls.get(key);let b=null;try{b=await DB.get(key)}catch{}const u=b?URL.createObjectURL(b):null;urls.set(key,u);return u}
 function drop(key){const u=urls.get(key);if(u)URL.revokeObjectURL(u);urls.delete(key)}
-async function hydrate(root=document){for(const e of root.querySelectorAll('img[data-k]'))e.src=(await mUrl('img:'+e.dataset.k))||(window.IMGDATA&&IMGDATA[e.dataset.k])||`images/${e.dataset.k}.png`}
+async function hydrate(root=document){for(const e of root.querySelectorAll('img[data-k]'))e.src=(await mUrl('img:'+e.dataset.k))||(window.IMGDATA&&IMGDATA[e.dataset.k])||`${e.dataset.k}.png`}
 // الصوت: تسجيل الأخصائية ← ملف في sounds/ ← صوت المتصفح التجريبي (اختياري)
 let cur=null;const miss=new Set();
 const stopAudio=()=>{cur&&cur.pause();window.speechSynthesis&&speechSynthesis.cancel()};
